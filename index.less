@@ -9,19 +9,33 @@
   background-color: @color1;
 }
 
+.fixed(@top:0, @left:0, @height:100%, @width:100%) {
+  position: fixed;
+  top: @top; left: @left; height: @height; width: @width;
+}
+
 /*****************************************************************************
    CONSTANTS
 *****************************************************************************/
 
-@leftIndent: 1em;
-@commentsLinkPadding: 0.3;
+@mainIndent: 2%;
+@storyIndent: 1em;
+
+@contentTop: 10px;
+@contentPanelHeight: 50px;
+@contentWidth: 90%;
+@contentDiminishedWidth: 40%;
+
+@commentsWidth: 60%;
 
 /*****************************************************************************
    GENERAL
 *****************************************************************************/
 
 * { margin: 0; padding: 0; }
+h1,h2,h3,h4,h5,h6 { font-weight: normal; font-size: 1em; }
 a,a:visited { color: #00b; text-decoration: none; }
+td { padding: 0 0.2em; }
 
 /*****************************************************************************
    PAGE STRUCTURE
@@ -29,135 +43,122 @@ a,a:visited { color: #00b; text-decoration: none; }
 
 body { font-size:100%; }
 #header { line-height: 1.3em; }
-#header { background: #f90; margin: 0 0 1em; padding: 1em 10% 0.5em; }
-#header .wrapper { margin-left: @leftIndent; }
-h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-weight: normal; }
+#header { background: #f90; margin: 0 0 1em; padding: 1em @mainIndent 0.5em; }
+#header .wrapper { margin-left: @storyIndent; }
+h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; }
 #about { font-size: 0.75em; }
 #main { text-align: center; }
+#main > * {
+  text-align: left; width: 100%-2*@mainIndent; margin: 0 auto 1em;
+}
+
+/*****************************************************************************
+   SETTINGS
+*****************************************************************************/
+
+#settings { padding-left: @storyIndent; }
+#settings input { width: 10em; }
+#settings button { padding: 0 1em; }
 
 /*****************************************************************************
    STORIES
 *****************************************************************************/
 
 #stories {
-  list-style-type: none;
-  margin: 0 auto 1em;
-  text-align: left;
-
-  a, a:visited { color: black; }
-  float: left;
+  background: #fff6f6;
+  border-collapse: collapse;
 }
 
 .story { 
-  padding: 0.5em 9em 0.5em @leftIndent;
   border: 1px solid black;
-  border-bottom-width: 0;
-  background: #fff6f6;
+  border-bottom-width: 0; &:last-child { border-bottom-width: 1px; }
   cursor: pointer;
-  position: relative;
-  &:hover { 
-    .linearGradient(#fc0, #fa0);
-  }
+  &:hover { .linearGradient(#fc0, #fa0); }
+  &.selected { background-color: red; }
   -webkit-transition: all 0.2s ease-in-out;
-  &:last-child { border-bottom-width: 1px; }  
+
+  .url { 
+    padding: 0.2em @storyIndent;
+  }
+
+  .commentsLink,.commentsLink:visited {
+    width: 1px;
+    text-align: right;
+    white-space: pre;
+    color: #666;
+
+    span {
+      border-radius: 0.3em;
+    }
+
+  }
+
+  .postedAgo { font-size: 0.75em; white-space: pre; }
+
+  .url a:hover, .postedBy:hover, .commentsLink:hover span { text-decoration: underline; }
+
 }
 
-.story.selected {
-  background-color: red;
+.readLaterStatus { 
+
+  width: 5em;
+  overflow: hidden;
+
+  opacity: 0.3; &:hover { opacity: 1; }
+
+  span {
+    text-align: center;
+    float: left;
+    width: 70%;
+    font-size: 0.7m; color: #666;
+    border: 1px solid #999; border-radius: 0.5em;
+    padding: 0 0.5em;
+    &:hover { background: #999; color: white; }
+    white-space: pre;
+  }
+
+  .success { background: #bbb; }
+
 }
 
+/*****************************************************************************
+  CONTENT AND COMMENTS
+*****************************************************************************/
 
-
-#content {
-  left: 100%;
-  width: 80%;
-  top: 0;
-  position: fixed;
-  height: 100%;
-  -webkit-transition: left,opacity 0.3s,0.3s ease-in-out,ease-in-out;
-  background-color: white;
-  border: none;
-  opacity: 0;
-  margin: 10px 0 -10px 0;
-  padding: 50px 0 0 0;
+#content, #contentPanel {
+  .fixed(0, 100%, 100%, @contentWidth);
+  -webkit-transition: left 0.3s ease-in-out;
+  background: white;
 }
 
-#content[src^=http] {
-  left: 20%;
-  opacity: 1;
+#contentPanel { .fixed(@contentTop, 100%, @contentPanelHeight, @contentWidth); }
+#content { .fixed(@contentTop+@contentPanelHeight, 100%, 100%, @contentWidth); }
+
+#content[src^=http], #content[src^=http] + #contentPanel {
+  left: 100-@contentWidth;
   -webkit-box-shadow: 0px 0px 20px #000;
 }
 
-#content_container {
-  left: 100%;
-  width: 80%;
-  top: 10px;
-  height: 50px;
-  position: fixed;
-  -webkit-transition: left,opacity 0.3s,0.3s ease-in-out,ease-in-out;
-  background-color: white;
-  border: none;
-  opacity: 0;
-  text-align: left;
-}
-
-#content[src^=http] + #content_container {
-  left: 20%;
-  opacity: 1;
-}
-
-#content.mid {
-  left: 60%;
-  opacity: 1;
-  -webkit-box-shadow: 0px 0px 20px #000;
-}
-
-#content.mid + #content_container {
-  left: 60%;
-  opacity: 1;
-  -webkit-box-shadow: 0px 0px 20px #000;
+#content.diminished, #content.diminished + #contentPanel {
+  .fixed(@contentTop, 100-@contentDiminishedWidth,
+         @contentPanelHeight, @contentWidth);
+  -webkit-transition: left 0.3s ease-in-out;
+  background: white;
 }
 
 #comments {
-  left: 100%;
-  width: 50%;
-  top: 65px;
-  position: fixed;
-  height: 100%;
-  -webkit-transition: left,opacity 0.3s,0.3s ease-in-out,ease-in-out;
+  .fixed(65px, 100%, 100%, @commentsWidth);
+  -webkit-transition: left 0.3s ease-in-out;
   background-color: white;
-  border: none;
-  opacity: 0;
 }
 
 #comments[src^=http] {
-  left: 50%;
-  opacity: 1;
+  left: 100-@commentsWidth;
   -webkit-box-shadow: 0px 0px 20px #000;
 }
 
-#comments.mid {
-  left: 70%;
-  opacity: 1;
-  -webkit-box-shadow: 0px 0px 20px #000;
-}
-
-#stories a.url, #stories a.url:visited { color: #00b; }
-
-.postedAgo { font-size: 0.75em; white-space: pre; }
-
-.commentsLink,.commentsLink:visited {
-  position: absolute; top: 50%; right: 1em; height: 1em;
-  margin-top: -0.5em-@commentsLinkPadding;
-  width: 7em; white-space: pre;
-  color: #666;
-
-  span {
-    float: right;
-    padding: 0em + @commentsLinkPadding;
-    border-radius: 0.3em;
-  }
-
-}
-
-.postedBy:hover, .commentsLink:hover span { .linearGradient(#fa0, #f80); }
+.error   { color: red; display: none; }
+.success { color: green; display: none; }
+.pending { display: none; }
+.toggle span { color: #00b; text-decoration: underline; cursor: pointer; }
+.toggle + form { display: none; }
