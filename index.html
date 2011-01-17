@@ -63,6 +63,12 @@
       </li>
     <% }); %>
   </script>
+  
+  <script id="itemTemplate" type="template">
+    <a target="_blank" class="commentsLink" href="http://news.ycombinator.com/item?id=<%= s.id %>"><span><%= s.commentCount %> comments</span></a>
+    <a target="content" class="url" href="<%= s.url %>" style="font-size:<%= Math.log(Math.log(Math.max(s.points,10))) %>em;" ><%= s.title %></a>
+    <span class="postAuxiliary"><span class="postedAgo"><%= s.postedAgo %> by <a target="_blank" class="postedBy" href="http://news.ycombinator.com/user?id=<%= s.postedBy %>"><%= s.postedBy %></a></span>
+  </script>
 
 </body>
 </html>

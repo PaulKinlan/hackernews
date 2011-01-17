@@ -1,11 +1,12 @@
 storiesTemplate = _.template($("#storiesTemplate").html())
+
 console.log("loading")
 show = () ->
   $.getJSON "http://api.ihackernews.com/page?format=jsonp&callback=?",
     (storyInfo) -> $("#stories").fadeOut () ->
       $(this).html(storiesTemplate(storyInfo))
       $(this).fadeIn()
-
+    
 show()
 setInterval show, 10*60*1000
 
@@ -92,9 +93,6 @@ $(window).bind "keyup", (ev) ->
 $(window).bind "scroll", (ev) ->
   $content = $ "#content"
   $comments = $ "#comments"
-  
-  console.log($content.attr("src"))
-  console.log($comments.attr("src"))
   
   $content.addClass("mid") if $content.attr("src")
   $comments.addClass("mid") if $comments.attr("src")? and $content.attr("src")
