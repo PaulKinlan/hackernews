@@ -21,8 +21,8 @@
 @mainIndent: 2%;
 @storyIndent: 1em;
 
-@contentTop: 10px;
-@contentPanelHeight: 50px;
+@contentTop: 0.3em;
+@contentPanelHeight: 4em;
 @contentWidth: 90%;
 @contentDiminishedWidth: 40%;
 
@@ -34,8 +34,14 @@
 
 * { margin: 0; padding: 0; }
 h1,h2,h3,h4,h5,h6 { font-weight: normal; font-size: 1em; }
-a,a:visited { color: #00b; text-decoration: none; }
+a,a:visited { color: black; text-decoration: none; }
 td { padding: 0 0.2em; }
+
+.error   { color: red; display: none; }
+.success { color: green; display: none; }
+.pending { display: none; }
+.pseudolink, .toggle span { color: black; text-decoration: underline; cursor: pointer; }
+.toggle + * { display: none; }
 
 /*****************************************************************************
    PAGE STRUCTURE
@@ -43,7 +49,7 @@ td { padding: 0 0.2em; }
 
 body { font-size:100%; }
 #header { line-height: 1.3em; }
-#header { background: #f90; margin: 0 0 1em; padding: 1em @mainIndent 0.5em; }
+#header { background: #fe761b; margin: 0 0 1em; padding: 1em @mainIndent 0.5em; }
 #header .wrapper { margin-left: @storyIndent; }
 h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; }
 #about { font-size: 0.75em; }
@@ -65,7 +71,7 @@ h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; 
 *****************************************************************************/
 
 #stories {
-  background: #fff6f6;
+  background: #f6f6ef;
   border-collapse: collapse;
 }
 
@@ -73,7 +79,7 @@ h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; 
   border: 1px solid black;
   border-bottom-width: 0; &:last-child { border-bottom-width: 1px; }
   cursor: pointer;
-  &:hover { .linearGradient(#fc0, #fa0); }
+  &:hover { .linearGradient(#fff4cc, #fff066); }
   &.selected { background-color: red; }
   -webkit-transition: all 0.2s ease-in-out;
 
@@ -128,11 +134,13 @@ h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; 
 #content, #contentPanel {
   .fixed(0, 100%, 100%, @contentWidth);
   -webkit-transition: left 0.3s ease-in-out;
-  background: white;
 }
 
-#contentPanel { .fixed(@contentTop, 100%, @contentPanelHeight, @contentWidth); }
+#content { background: white; }
 #content { .fixed(@contentTop+@contentPanelHeight, 100%, 100%, @contentWidth); }
+
+#contentPanel { .linearGradient(#ddd, #fff); }
+#contentPanel { .fixed(@contentTop, 100%, @contentPanelHeight, @contentWidth); }
 
 #content[src^=http], #content[src^=http] + #contentPanel {
   left: 100-@contentWidth;
@@ -157,8 +165,32 @@ h1 { font-family: "Josefin Sans", ariel, helvetica, sans-serif; font-size: 2em; 
   -webkit-box-shadow: 0px 0px 20px #000;
 }
 
-.error   { color: red; display: none; }
-.success { color: green; display: none; }
-.pending { display: none; }
-.toggle span { color: #00b; text-decoration: underline; cursor: pointer; }
-.toggle + form { display: none; }
+/*****************************************************************************
+  CONTENT PANEL
+*****************************************************************************/
+
+.storyMain  {
+
+  padding: 0.4em;
+  .title { font-size: 1.5em; }
+  #twitter { padding: 0.5em; }
+
+}
+
+.postAuxiliary { font-size: 0.8em; }
+
+.navControls { float: right; margin: 0.5em 1em }
+#simplifiedWrapper { margin-bottom: 0.2em; }
+#contentPanel .commentsLink { display: block; }
+#contentPanel .commentsOn { display: none; }
+#twitter { background: #ddd; }
+
+.close {
+  float: right;
+  margin: 0.3em 0.3em;
+  background: #ccc;
+  font-size: 1.8em;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 5px #000;
+}

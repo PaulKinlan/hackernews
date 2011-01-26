@@ -55,17 +55,42 @@
       </form>
     </div>
 
-    <div id="twitter">
-      <div id="tweetBox"></div>
-    </div>
-
     <table id="stories"></table>
 
   </div>
 
-  <iframe id="content" sandbox name="content"></iframe>
-  <div id="contentPanel">{{ Controls Will Go here.}}</div>
-  <iframe id="comments" sandbox name="comments"></iframe>
+  <iframe id="content" name="content"></iframe>
+
+  <div id="contentPanel">
+
+    <div class="close">X</div>
+    <div class="navControls">
+      <div id="simplifiedWrapper"><input id="simplified" type="checkbox" /> simple view</div>
+      <div>
+        <a class="commentsLink commentsOn" target="_blank" data-href="commentsURL"><span data-property="commentCount"></span> comments &raquo;</a>
+        <a class="commentsLink commentsOff" target="_blank" data-href="commentsURL">&laquo; <span data-property="commentCount"></span> comments</a>
+      </div>
+    </div>
+
+    <div class="storyMain">
+
+      <a class="title" data-property="title" data-href="url" target="_blank"></a>
+
+      <div class="postAuxiliary">
+        <span data-property="points"></span> points. <span data-property="postedAgo" class="postedAgo"></span> by <a target="_blank" class="postedBy" data-property="postedBy" data-href="posterURL"></a>.
+        <span>read later</span>
+        <span id="tweet" class="toggle"><span>tweet</span></span>
+        <div id="twitter">
+          <div id="shortenURLs" class="pseudolink">shorten URLs</div>
+          <div id="tweetBox"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <iframe id="comments" name="comments"></iframe>
 
   <!-- POST-PAGE SCRIPTS -->
 
@@ -75,18 +100,14 @@
   <script src="lib/coffee-script.js"></script>
   <script src="http://platform.twitter.com/anywhere.js?id=HQdhAp7xaImuZvaV1WaCtg&v=1" type="text/javascript"></script>
 
-  <script id="storiesTemplate" type="template">
-    <% _.each(items, function(s) { %>
-
-      <tr class="story">
-
+  <script id="storyTemplate" type="template">
         <td class="url">
-          <a target="_blank" href="<%= s.url %>" style="font-size:<%= Math.log(Math.log(Math.max(s.points,10))) %>em;" ><%= s.title %></a>
-          <span class="postAuxiliary"><span class="postedAgo"><%= s.postedAgo %> by <a target="_blank" class="postedBy" href="http://news.ycombinator.com/user?id=<%= s.postedBy %>"><%= s.postedBy %></a></span>
+          <a target="_blank" href="<%= url %>" style="font-size:<%= Math.log(Math.log(Math.max(points,10))) %>em;" ><%= title %></a>
+          <span class="postAuxiliary"><span class="postedAgo"><%= postedAgo %> by <a target="_blank" class="postedBy" href="<%= posterURL %>"><%= postedBy %></a></span>
         </td>
 
         <td class="commentsLink">
-          <a target="_blank" href="http://news.ycombinator.com/item?id=<%= s.id %>"><span><%= s.commentCount %> comments</span></a>
+          <a target="_blank" href="<%= commentsURL %>"><span><%= commentCount %> comments</span></a>
         </td>
 
         <td class="readLaterStatus">
@@ -94,16 +115,9 @@
           <span class="pending">saving ...</span>
           <span class="success">saved</span>
         </td>
-
-      </tr>
-
-    <% }); %>
   </script>
-  
-  <script id="itemTemplate" type="template">
-    <a target="_blank" class="commentsLink" href="http://news.ycombinator.com/item?id=<%= s.id %>"><span><%= s.commentCount %> comments</span></a>
-    <a target="content" class="url" href="<%= s.url %>" style="font-size:<%= Math.log(Math.log(Math.max(s.points,10))) %>em;" ><%= s.title %></a>
-    <span class="postAuxiliary"><span class="postedAgo"><%= s.postedAgo %> by <a target="_blank" class="postedBy" href="http://news.ycombinator.com/user?id=<%= s.postedBy %>"><%= s.postedBy %></a></span>
+
+  <script id="contentPanelTemplate" type="template">
   </script>
 
 </body>
